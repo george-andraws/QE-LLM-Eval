@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Coptic font */
+@font-face {
+  font-family: "CopticFont";
+  src: url("/fonts/CS Copt.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Hazzat musical notation fonts */
+/* "HazzatFont" covers CSS class usage; "Hazzat" covers inline style="font-family: Hazzat" in English hazzat HTML */
+@font-face {
+  font-family: "HazzatFont";
+  src: url("/fonts/hazzat1_10a.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hazzat";
+  src: url("/fonts/hazzat1_10a.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HazzatVFont";
+  src: url("/fonts/HazzatV.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "HazzatAFont";
+  src: url("/fonts/HazzatA.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* CSS classes used inside dangerouslySetInnerHTML hazzat content */
+.CopticFont   { font-family: "CopticFont", serif; }
+.HazzatFont,
+.hazzatfont   { font-family: "HazzatFont", serif; }
+.HazzatVFont  { font-family: "HazzatVFont", serif; }
+.HazzatAFont  { font-family: "HazzatAFont", serif; }
+.EnglishFont,
+.englishfont  { font-family: Georgia, serif; }
+.ArabicFont   { font-family: var(--font-noto-arabic), "Noto Sans Arabic", Arial, sans-serif; }
+.MsoNormal    { margin: 0; }
