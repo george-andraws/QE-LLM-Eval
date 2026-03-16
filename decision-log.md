@@ -61,8 +61,31 @@ Build a demonstrable portfolio project that shows hands-on experience using AI t
 
 ## Ongoing Log
 
-_Add entries below as the project progresses. Format: date, what happened, what was decided, why._
 
-### Day 1
-- 
+### Day 2 — 2026-03-15
 
+**What was built:**
+- Scaffolded a full Next.js 16 app (App Router, TypeScript, Tailwind) inside the `coptic-hymns/` directory.
+- Defined TypeScript interfaces for the full data hierarchy: Season → Service → Hymn → Format → Variation → Content, with type guards (`isTextContent`, `isHazzatContent`).
+- Built a client-side data layer: `seasons.json` lives in `public/` and is fetched once on load, then module-level cached so navigating between pages doesn't re-fetch the 10 MB file.
+- Implemented the full navigation hierarchy across four route levels: home (all seasons) → season detail (services) → service detail (hymns) → hymn detail.
+- Hymn detail page renders Text content as a three-column table (English / Coptic / Arabic), with Arabic set to `dir="rtl"`. Hazzat HTML is rendered below via `dangerouslySetInnerHTML`.
+- Added breadcrumb navigation on all inner pages.
+- Built client-side search (`/search?q=…`) that scans all paragraph text across all hymns and returns results with match snippets and inline highlighting.
+- Added `@font-face` rules and global CSS classes for all seven font types used in the hazzat HTML: `CopticFont` (CS Copt.ttf), `HazzatFont` / `Hazzat` (hazzat1_10a.ttf), `HazzatVFont`, `HazzatAFont`, `EnglishFont`, `ArabicFont` (Noto Sans Arabic via Google Fonts).
+
+**Issues identified and resolved:**
+1. **English Hazzat not rendering in musical notation font.** Root cause: English hazzat HTML uses `style="font-family: Hazzat, sans-serif"` as an inline style, not a CSS class — so the `.HazzatFont` class rule had no effect on it. Fix: added a second `@font-face` declaration with `font-family: "Hazzat"` (matching the inline style name exactly) pointing to the same `hazzat1_10a.ttf` file.
+2. **Coptic text column rendering in Courier.** Root cause: the table cell had a `font-mono` Tailwind class applied, which overrides font to a monospace stack. Fix: removed `font-mono` and replaced it with the global `CopticFont` class, which applies `font-family: "CopticFont", serif` (CS Copt.ttf).
+
+**Observations about AI-assisted development (relevant to Phase 2):**
+- Claude Code scaffolded navigation, types, data fetching, and search correctly in one pass with no iteration needed.
+- The font rendering bugs required human observation from the browser — Claude Code could not detect them without being told what was visually wrong. This is a meaningful limitation: AI can generate correct-looking code that fails in ways only visible at runtime or in the rendered UI.
+- The inconsistent casing in the JSON (`"English"` vs `"english"`, `HazzatFont` vs `hazzatfont`) and the mix of CSS class vs. inline style in the hazzat HTML are real-world data quality issues that required inspection and defensive handling. AI handled the normalization cleanly once the problem was described.
+
+### Day 1 - used Claude AI to generate requirements and prompt for Claude Code in VSCode to create html site
+- Setup dev environment: VSCode, node.js via nvm, Copilot, Claude Code, etc. Rusty but feels great to have a fresh start.
+- **Chose Coptic Hymns site as the passion project.** Data source: `seasons.json` (10.4 MB, 32 seasons, 564 hymns, trilingual English/Coptic/Arabic). Modeled after hazzat.com. Rich enough for meaningful test cases in Phase 2, personally meaningful.
+- **Scope: Text content only for MVP.** I gave Claude Code AI coding assistant a structured prompt and had a functional site with trilingual rendering, custom font support, and full-text search running locally. First pass took 10 minutes. Updating fonts and column display issues took another 10 minutes.
+- **Runtime JSON loading over build-time.** Tradeoff: slightly slower page loads vs. simpler development loop (edit JSON → refresh browser). Chose simplicity since the site runs locally and the learning goal is AI-assisted development, not production performance.
+- **Font strategy:** Hazzat HTML content uses 7 CSS classes (HazzatFont, CopticFont, EnglishFont, etc.) mapped to .ttf font files available as freeware from hazzat.com. Plan: download fonts, add @font-face rules. Deferred to after core navigation works. Claude handled the changes well and even an update to switch hazzat from displaying above-below to side-by-side.
